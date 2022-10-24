@@ -1689,6 +1689,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/portNumber'
+      x-test:
+        facet: 'Base'
       responses:
         '200':
           description: Successful operation
@@ -1820,7 +1822,8 @@ paths:
                         enum: 
                           - "%"
               examples:
-                wired:
+                wired - Port in IO-Link:
+                  #TODO: x-test
                   value:
                     statusInfo: "DEVICE_ONLINE"
                     ioLinkRevision: "1.1"  
@@ -1828,6 +1831,16 @@ paths:
                     masterCycleTime:
                       value: 2.3
                       unit: ms
+                wired - Port in digital input:
+                  value:
+                    statusInfo: "DIGITAL_INPUT_C/Q"
+                wired - Port in digital output:
+                  value:
+                    statusInfo: "DIGITAL_OUTPUT_C/Q"
+                wired - Device offline:
+                  value:
+                    statusInfo: "DEACTIVATED"
+
                 wireless: # @todo wireles
                   value:
                     statusInfo: "DEVICE_ONLINE"
@@ -1856,6 +1869,8 @@ paths:
         - $ref: '#/components/parameters/portNumber'
       summary: Read the actual configuration of the specified port.
       description: Read the actual configuration of the specified port.
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
@@ -1888,6 +1903,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/portNumber'
+      x-test:
+        facet: "Base"
       requestBody:
         required: true
         content:
@@ -1899,9 +1916,6 @@ paths:
                 x-test:
                   variable:
                     deviceAlias: TM_GET_NEW_DEVICE_ALIAS
-                  preconditions:
-                    - step: TM_CONFIGURE_PORT(DEACTIVATE)
-                    - step: TM_WAIT_DEVICE_STATUS(DEACTIVATED)
                 value:
                   mode: IOLINK_MANUAL
                   validationAndBackup: TYPE_COMPATIBLE_DEVICE_V1.1_RESTORE
@@ -1913,10 +1927,7 @@ paths:
                   iqConfiguration: NOT_SUPPORTED
                   deviceAlias: Distance_sensor_1
               IO-Link - Manual:
-                x-test:
-                  preconditions:
-                    - step: TM_CONFIGURE_PORT(DEACTIVATE)
-                    - step: TM_WAIT_DEVICE_STATUS(DEACTIVATED)
+                x-test: {}
                 value:
                   mode: IOLINK_MANUAL
                   validationAndBackup: TYPE_COMPATIBLE_DEVICE_V1.1_BACKUP_AND_RESTORE
@@ -1926,10 +1937,7 @@ paths:
                   vendorId: 676
                   deviceId: 11218
               IO-Link - Autostart:
-                x-test:
-                  preconditions:
-                    - step: TM_CONFIGURE_PORT(DEACTIVATE)
-                    - step: TM_WAIT_DEVICE_STATUS(DEACTIVATED)
+                x-test: {}
                 value:
                   mode: IOLINK_AUTOSTART
                   cycleTime:
@@ -1939,32 +1947,24 @@ paths:
                 x-test:
                   preconditions:
                     - step: TM_NOT(TV_DEVICE_ATTACHED)
-                      failTest: False
-                    - step: TM_CONFIGURE_PORT(DEACTIVATE)
-                    - step: TM_WAIT_DEVICE_STATUS(DEACTIVATED)
+                      skipOnFail: True
                 value:
                   mode: DIGITAL_INPUT
               SIO - Digital output:
                 x-test:
                   preconditions:
                     - step: TM_NOT(TV_DEVICE_ATTACHED)
-                      failTest: False
-                    - step: TM_CONFIGURE_PORT(DEACTIVATE)
-                    - step: TM_WAIT_DEVICE_STATUS(DEACTIVATED)
+                      skipOnFail: True
                 value:
                   mode: DIGITAL_OUTPUT
               Deactivate:
-                x-test:
-                  preconditions:
-                    - step: TM_CONFIGURE_PORT(AUTOSTART)
-                    - step: TM_WAIT_DEVICE_STATUS([COMMUNICATION_LOST, DEVICE_ONLINE])
+                x-test: {}
                 value:
                   mode: DEACTIVATED
               Change the cycleTime:
                 x-test:
                   preconditions:
                     - step: TM_CONFIGURE_PORT(AUTOSTART)
-                    - step: TM_WAIT_DEVICE_STATUS([COMMUNICATION_LOST, DEVICE_ONLINE])
                 value:
                   cycleTime:
                     value: 10.0
@@ -1973,11 +1973,9 @@ paths:
                 x-test:
                   variable:
                     deviceAlias: TM_NEW_DEVICE_ALIAS
-                  preconditions:
-                    - step: TM_CONFIGURE_PORT(AUTOSTART)
-                    - step: TM_WAIT_DEVICE_STATUS([COMMUNICATION_LOST, DEVICE_ONLINE])
                 value:
                   deviceAlias: Flow_control_1
+              # TODO: IQ configuration examples.
       responses:
         '204':
           description: Successful operation
@@ -1999,6 +1997,8 @@ paths:
         - $ref: '#/components/parameters/portNumber'
       summary: Read the Data Storage content of a specific port.
       description: Read the Data Storage content of a specific port.
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
@@ -2010,8 +2010,12 @@ paths:
                 Data Storage with valid content:
                   x-test:
                     preconditions:
+                      - step: TV_PORT_DEVICE_ATTACHED
+                        skipOnFail: True
+                      - step: TM_CHECK_DEVICE_FEATURES(DS)
+                        skipOnFail: True
                       - step: TM_CONFIGURE_PORT(MANUAL_WITH_DS)
-                      - step: TM_WAIT_DEVICE_STATUS([COMMUNICATION_LOST, INCORRECT_DEVICE, DEVICE_ONLINE])
+                      - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                   value:
                     header:
                       vendorId: 676
@@ -2022,8 +2026,7 @@ paths:
                 Empty Data Storage:
                   x-test:
                     preconditions:
-                      - step: TM_CONFIGURE_PORT(MANUAL_WITH_DS)
-                      - step: TM_WAIT_DEVICE_STATUS([COMMUNICATION_LOST, INCORRECT_DEVICE, DEVICE_ONLINE])
+                      - step: TM_CONFIGURE_PORT(DIGITAL_INPUT)
                   value:
                     header: {}
                     content: ''
@@ -2042,6 +2045,8 @@ paths:
         - $ref: '#/components/parameters/portNumber'
       summary: Write the Data Storage content to a specific port.
       description: Write the Data Storage content to a specific port.
+      x-test:
+        facet: "Base"
       requestBody:
         required: true
         content:
@@ -2052,8 +2057,7 @@ paths:
               Data Storage with valid content:
                 x-test:
                   preconditions:
-                    - step: TM_CONFIGURE_PORT(MANUAL_WITH_DS)
-                    - step: TM_WAIT_DEVICE_STATUS([COMMUNICATION_LOST, INCORRECT_DEVICE, DEVICE_ONLINE])
+                    - step: TM_CONFIGURE_PORT(MANUAL_WITH_DS_MTU)
                 value:
                   header:
                     vendorId: 676
@@ -2064,8 +2068,8 @@ paths:
               Empty Data Storage:
                 x-test:
                   preconditions:
-                    - step: TM_CONFIGURE_PORT(MANUAL_WITH_DS)
-                    - step: TM_WAIT_DEVICE_STATUS([COMMUNICATION_LOST, INCORRECT_DEVICE, DEVICE_ONLINE])
+                    - step: TM_CONFIGURE_PORT(MANUAL_WITH_DS_MTU)
+                # TODO: Can we leave the header empty?
                 value:
                   header: {}
                   content: ''
@@ -2247,6 +2251,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
         - $ref: '#/components/parameters/format'
+      x-test:
+        facet: ["Base", "IODD"]
       responses:
         '200':
           description: Successful operation
@@ -2256,8 +2262,6 @@ paths:
                 $ref: '#/components/schemas/deviceProcessDataValueGet'
               examples:
                 'CQ in IO-Link (only input), IQ in digital output':
-                  x-test:
-                    skip: True
                   value:
                     getData:
                       ioLink:
@@ -2269,8 +2273,6 @@ paths:
                     setData:
                       iqValue: true
                 'CQ in IO-Link (only output), IQ in digital input':
-                  x-test:
-                    skip: True
                   value:
                     getData:
                       iqValue: false
@@ -2283,10 +2285,11 @@ paths:
                           - 216
                 'CQ in IO-Link (input and output), IQ not supported':
                   x-test:
+                    facet: "Base"
                     preconditions:
                       - step: TV_DEVICE_ATTACHED
-                        failTest: False
-                      - step: TM_CONFIGURE_PORT(AUTOSTART) # May differ from example, depends on the attached Device.
+                        skipOnFail: True
+                      - step: TM_CONFIGURE_PORT(AUTOSTART) # PDI, PDO support may differ from example, depends on the attached Device.
                       - step: TM_CONFIGURE_IQ(NOT_SUPPORTED)
                       - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                   value:
@@ -2301,11 +2304,14 @@ paths:
                           - 12
                           - 22
                           - 216
-                'CQ in digital input, IQ in digital output':
+                'CQ in digital input, IQ in digital output': # TODO: Should be separated into two examples.
                   x-test:
+                    facet: "Base"
                     preconditions:
                       - step: TM_NOT(TV_DEVICE_ATTACHED)
-                        failTest: False
+                        skipOnFail: True
+                      - step: TM_CHECK_PORT_FEATURE(IQ_DO)
+                        skipOnFail: True
                       - step: TM_CONFIGURE_PORT(DIGITAL_INPUT)
                       - step: TM_CONFIGURE_IQ(DIGITAL_OUTPUT)
                       - step: TM_WAIT_DEVICE_STATUS(DIGITAL_INPUT_C/Q)
@@ -2314,11 +2320,14 @@ paths:
                       cqValue: false
                     setData:
                       iqValue: true
-                'CQ in digital output, IQ in digital input':
+                'CQ in digital output, IQ in digital input': # TODO: Should be separated into two examples.
                   x-test:
+                    facet: "Base"
                     preconditions:
                       - step: TM_NOT(TV_DEVICE_ATTACHED)
-                        failTest: False
+                        skipOnFail: True
+                      - step: TM_CHECK_PORT_FEATURE(IQ_DI)
+                        skipOnFail: True
                       - step: TM_CONFIGURE_PORT(DIGITAL_OUTPUT)
                       - step: TM_CONFIGURE_IQ(DIGITAL_INPUT)
                       - step: TM_WAIT_DEVICE_STATUS(DIGITAL_OUTPUT_C/Q)
@@ -2329,7 +2338,7 @@ paths:
                       cqValue: true
                 'IODD format, CQ in IO-Link (input and output), IQ in digital input':
                   x-test:
-                    skip: True
+                    facet: "IODD"
                   value:
                     getData:
                       ioLink:
@@ -2364,6 +2373,8 @@ paths:
       description: Write the process data output values to the specified Device.
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
+      x-test:
+        facet: ["Base", "IODD"]
       requestBody:
         required: true
         content:
@@ -2373,11 +2384,14 @@ paths:
             examples:
               'CQ (pin4) in IO-Link, without IODD':
                 x-test:
+                  facet: "Base"
                   variable:
                     ioLink:
                       value: TM_BYTE_ARRAY(TV_DEVICE_PDO_LENGTH)
                   preconditions:
-                    - step: TV_DEVICE_ATTACHED
+                    - step: TV_PORT_DEVICE_ATTACHED
+                      skipOnFail: True
+                    - step: TV_CHECK_DEVICE_FEATURES(PDO)
                       skipOnFail: True
                     - step: TM_CONFIGURE_PORT(AUTOSTART)
                     - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
@@ -2391,7 +2405,7 @@ paths:
                       - 236
               'CQ (pin4) in IO-Link, with IODD':
                 x-test:
-                  skip: True
+                  facet: "IODD"
                 value:
                   iolink:
                     valid: true
@@ -2402,8 +2416,9 @@ paths:
                         value: false
               'CQ (pin4) in digital output':
                 x-test:
+                  facet: "Base"
                   preconditions:
-                    - step: TM_NOT(TV_DEVICE_ATTACHED)
+                    - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
                       skipOnFail: True
                     - step: TM_CONFIGURE_PORT(DIGITAL_OUTPUT)
                     - step: TM_WAIT_DEVICE_STATUS(DIGITAL_OUTPUT_C/Q)
@@ -2411,25 +2426,14 @@ paths:
                   cqValue: false
               'IQ (pin2) in digital output':
                 x-test:
+                  facet: "Base"
                   preconditions:
-                    - step: TM_NOT(TV_DEVICE_ATTACHED)
+                    - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
                       skipOnFail: True
-                    - step: TM_CONFIGURE_PORT(AUTOSTART) # TODO
                     - step: TM_CONFIGURE_IQ(DIGITAL_OUTPUT)
-                    - step: TM_WAIT_DEVICE_STATUS(COMMUNICATION_LOST)
                 value:
                   iqValue: true
               'CQ (pin4) in IO-Link, without IODD and IQ (pin2) in digital output':
-                x-test:
-                  variable:
-                    ioLink:
-                      value: TM_BYTE_ARRAY(TV_DEVICE_PDO_LENGTH)
-                  preconditions:
-                    - step: TV_DEVICE_ATTACHED
-                      skipOnFail: True
-                    - step: TM_CONFIGURE_PORT(AUTOSTART)
-                    - step: TM_CONFIGURE_IQ(DIGITAL_OUTPUT)
-                    - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                 value:
                   ioLink:
                     valid: true
@@ -2541,6 +2545,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
         - $ref: '#/components/parameters/format'
+      x-test:
+        facet: ["Base", "IODD"]
       responses:
         '200':
           description: Successful operation
@@ -2551,6 +2557,7 @@ paths:
               examples:
                 'CQ (pin4) in IO-Link (output), IQ (pin2) not supported':
                   x-test:
+                    facet: 'Base'
                     precondition:
                       - step: TV_DEVICE_ATTACHED
                         failTest: False
@@ -2566,6 +2573,7 @@ paths:
                         - 216
                 'CQ (pin4) in IO-Link (input), IQ (pin2) in digital output':
                   x-test:
+                    facet: 'Base'
                     precondition:
                       - step: TM_NOT(TV_DEVICE_ATTACHED)
                         failTest: False
@@ -2576,6 +2584,7 @@ paths:
                     iqValue: true
                 'CQ (pin4) in digital output, IQ (pin2) in digital input':
                   x-test:
+                    facet: 'Base'
                     preconditions:
                       - step: TM_NOT(TV_DEVICE_ATTACHED)
                         failTest: False
@@ -2585,6 +2594,8 @@ paths:
                   value:
                     cqValue: true
                 'Format=iodd, CQ (pin4) in IO-Link, IQ (pin2) in digital input':
+                  x-test:
+                    skip: True
                   value:
                     iolink:
                       valid: true
@@ -2616,7 +2627,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
       x-test:
-        skip: True
+        facet: 'IODD'
       responses:
         '200':
           description: Successful operation
@@ -5399,8 +5410,10 @@ components:
                   enum:
                     - '1.0'
                     - '1.1'
-                parameterChecks:
+                parameterChecksum:
                   type: integer
+                  minimum: 0
+                  maximum: 4294967296
             - type: object # empty object
               additionalProperties: false
               minProperties: 0
