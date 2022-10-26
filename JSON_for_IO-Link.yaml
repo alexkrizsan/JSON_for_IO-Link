@@ -78,6 +78,8 @@ paths:
       description: >-
         Returns the login status of the user as a boolean value
       operationId: getUsersLogin
+      x-test:
+        facet: "Manual" # TODO
       responses:
         '200':
           description: OK
@@ -100,6 +102,8 @@ paths:
       description: >-
          Credentials based authentication - Depending on technical feasibility, the HTTP cookie header shall be used. If the backend does not support cookies, the session bearer token shall be sent in the JSON body. The client has to support both mechanisms.
       operationId: postUsersLogin
+      x-test:
+        facet: "Manual" # TODO
       requestBody:
         required: true
         content:
@@ -167,6 +171,8 @@ paths:
       description: >-
         This command does not discern between a logged out or a logged in user.
       operationId: postUsersLogout
+      x-test:
+        facet: "Manual" # TODO
       responses:
         '204':
           description: |
@@ -189,6 +195,8 @@ paths:
       summary: Read the version information as list of specification references.
       description: >-
         This command is mandatory.      
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
@@ -225,6 +233,8 @@ paths:
       summary: Read the known IO-Link gateways as list of URLs.
       description: >-
         This command is optional.
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
@@ -266,13 +276,15 @@ paths:
         - gateway
       summary: Read the identification of the Gateway.
       description: Read the identification of the Gateway.
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/gatewayIdentificationGet'
+                $ref: '#/components/schemas/gatewayIdentificationGet' # TODO: Example in schema.
         '403':
            $ref: '#/components/responses/HTTP_403'
         '500':
@@ -284,13 +296,15 @@ paths:
         - gateway
       summary: Read the capabilities of the Gateway.
       description: Read the capabilities of the Gateway.
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/gatewayCapabilitiesGet'
+                $ref: '#/components/schemas/gatewayCapabilitiesGet' # TODO: Example in schema.
         '403':
            $ref: '#/components/responses/HTTP_403'
         '500':
@@ -302,6 +316,8 @@ paths:
         - gateway
       summary: Read the configuration of the Gateway.
       description: Read the configuration of the Gateway.
+      x-test:
+        facet: "Manual" # TODO
       responses:
         '200':
           description: Successful operation
@@ -349,6 +365,8 @@ paths:
         - gateway
       summary: Write the configuration of the Gateway.
       description: Write the configuration of the Gateway.
+      x-test:
+        facet: "Manual" # TODO
       requestBody:
         required: true
         content:
@@ -396,6 +414,8 @@ paths:
         - gateway
       summary: Reset the Gateway including all Masters. Optional.
       description: Reset the Gateway including all Masters.  Optional.
+      x-test:
+        facet: "Manual" # TODO
       responses:
         '204':
           description: Successful operation
@@ -413,6 +433,8 @@ paths:
         - gateway
       summary: Reboot the Gateway including all Masters. Optional.
       description: Reboot the Gateway including all Masters. Optional.
+      x-test:
+        facet: "Manual" # TODO
       responses:
         '204':
           description: Successful operation
@@ -437,6 +459,8 @@ paths:
         - $ref: '#/components/parameters/eventdeviceAlias'
         - $ref: '#/components/parameters/eventTop'
         - $ref: '#/components/parameters/eventBottom'
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
@@ -446,6 +470,9 @@ paths:
                 $ref: '#/components/schemas/gatewayEventsGet'
               examples:
                 origin=ALL:
+                  x-test:
+                    parameters:
+                      origin: "ALL"
                   value:
                     - time: '2018-05-18T07:31:54.123Z'
                       severity: WARNING
@@ -473,6 +500,10 @@ paths:
                         mode: APPEARS
                         text: Device temperature over-run – Clear source of heat
                 origin=MASTERS:
+                  x-test:
+                    parameters:
+                      origin: "MASTERS"
+                      masterNumber: 1 # TODO
                   value:
                     - time: '2018-05-18T07:31:54.123Z'
                       severity: WARNING
@@ -481,6 +512,11 @@ paths:
                       message:
                         text: IO-Link Master has restarted
                 origin=PORTS:
+                  x-test:
+                    parameters:
+                      origin: "PORTS"
+                      masterNumber: 1 # TODO
+                      portNumber: 1 # TODO
                   value:
                     - time: '2018-05-18T07:32:42.023Z'
                       severity: ERROR
@@ -510,6 +546,10 @@ paths:
                         mode: SINGLESHOT
                         text: New slave
                 origin=DEVICES:
+                  x-test:
+                    parameters:
+                      origin: "DEVICE"
+                      deviceAlias: "test_device_alias" # TODO: New macro?
                   value:
                     - time: '2018-05-18T07:31:54.123Z'
                       severity: WARNING
@@ -550,6 +590,8 @@ paths:
         - $ref: '#/components/parameters/eventdeviceAlias'
         - $ref: '#/components/parameters/eventTop'
         - $ref: '#/components/parameters/eventBottom'
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation             
@@ -568,6 +610,8 @@ paths:
       summary: >-
         Read the MQTT configuration of the Gateway.
       description: Read the MQTT configuration of the Gateway.
+      x-test:
+        facet: "MQTT"
       responses:
         '200':
           description: Successful operation
@@ -607,6 +651,8 @@ paths:
       summary: >-
         Update the MQTT configuration of the Gateway.
       description: Update the MQTT configuration of the Gateway.
+      x-test:
+        facet: "MQTT"
       requestBody:
         required: true
         content:
@@ -648,6 +694,8 @@ paths:
         - mqtt
       summary: Get the list of MQTT topics.
       description: Get the list of MQTT topics.
+      x-test:
+        facet: "MQTT"
       responses:
         '200':
           description: Successful operation
@@ -714,6 +762,8 @@ paths:
         - mqtt
       summary: Create a new MQTT topic.
       description: Create a new MQTT topic.
+      x-test:
+        facet: "MQTT"
       requestBody:
         required: true
         content:
@@ -783,6 +833,8 @@ paths:
       description: Get one MQTT topic.
       parameters:
         - $ref: '#/components/parameters/mqttTopicId'
+      x-test:
+        facet: "MQTT"
       responses:
         '200':
           description: Successful operation
@@ -850,6 +902,8 @@ paths:
       description: Delete a specific MQTT topic.
       parameters:
         - $ref: '#/components/parameters/mqttTopicId'
+      x-test:
+        facet: "MQTT"
       responses:
         '204':
           description: Successful operation
@@ -870,6 +924,8 @@ paths:
         - mqtt
       summary: Read the connection status of the MQTT client to the MQTT server.
       description: Read the connection status of the MQTT client to the MQTT server.
+      x-test:
+        facet: "MQTT"
       responses:
         '200':
           description: Successful operation
@@ -899,6 +955,8 @@ paths:
         - $ref: '#/components/parameters/vendorId'
         - $ref: '#/components/parameters/deviceId'
         - $ref: '#/components/parameters/revision'
+      x-test:
+        facet: "IODD"
       responses:
         '200':
           description: Successful operation
@@ -926,6 +984,8 @@ paths:
         - $ref: '#/components/parameters/vendorId'
         - $ref: '#/components/parameters/deviceId'
         - $ref: '#/components/parameters/revision'
+      x-test:
+        facet: "IODD"
       responses:
         '204':
           description: Successful operation
@@ -950,6 +1010,8 @@ paths:
         - $ref: '#/components/parameters/vendorId'
         - $ref: '#/components/parameters/deviceId'
         - $ref: '#/components/parameters/revision'
+      x-test:
+        facet: "IODD"
       responses:
         '200':
           description: Successful operation
@@ -977,6 +1039,8 @@ paths:
       description: >
         It is not needed to specify the identification data for this action as the
         parser can read this information.
+      x-test:
+        facet: "IODD"
       requestBody:
         required: true
         content:
@@ -1007,13 +1071,15 @@ paths:
         Read all the available masterNumber keys with the corresponding
         identification information.
       description: Read all the available masterNumber keys with the corresponding identification information.
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/identificationMasters'
+                $ref: '#/components/schemas/identificationMasters'  # TODO: Example in schema.
         '403':
            $ref: '#/components/responses/HTTP_403'
         '500':
@@ -1027,6 +1093,8 @@ paths:
       description: Read the capabilities of the Master.
       parameters:
         - $ref: '#/components/parameters/masterNumber'
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
@@ -1060,13 +1128,15 @@ paths:
       description: Read the identification of the Master.
       parameters:
         - $ref: '#/components/parameters/masterNumber'
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/identificationGet'
+                $ref: '#/components/schemas/identificationGet'  # TODO: Example in schema.
         '403':
            $ref: '#/components/responses/HTTP_403'
         '404':
@@ -1081,6 +1151,8 @@ paths:
       description: Write application specific identification to a Master.
       parameters:
         - $ref: '#/components/parameters/masterNumber'
+      x-test:
+        facet: "Base"
       requestBody:
         required: true
         content:
@@ -1088,7 +1160,8 @@ paths:
             schema:
               $ref: '#/components/schemas/identificationPost'
             examples:
-              All optional fiels:
+              All optional fields:
+                x-test: {}
                 value:
                   applicationSpecificTag: Fallback reader at the end of the belt
                   locationTag: Down under
@@ -1113,7 +1186,9 @@ paths:
       summary: Read the actual configuration of the specified Master.
       description: Read the actual configuration of the specified Master.
       parameters:
-        - $ref: '#/components/parameters/masterNumber'      
+        - $ref: '#/components/parameters/masterNumber'   
+      x-test:
+        facet: "Wireless" # TODO
       responses:
         '200':
           description: Successful operation
@@ -1132,7 +1207,9 @@ paths:
       summary: Write the configuration of the specified Master.
       description: Write the configuration of the specified Master.
       parameters:
-        - $ref: '#/components/parameters/masterNumber'      
+        - $ref: '#/components/parameters/masterNumber' 
+      x-test:
+        facet: "Wireless" # TODO     
       requestBody:
         required: true
         content:
@@ -1189,7 +1266,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/masterNumber'
       description: >-
-        A W-Master can handle up to 5 transmission tracks in parallel, each trackNumber can handle a maximum of 8 W-Devices, thus supporting up to 40 W-Devices per W-Master.         
+        A W-Master can handle up to 5 transmission tracks in parallel, each trackNumber can handle a maximum of 8 W-Devices, thus supporting up to 40 W-Devices per W-Master.
+      x-test:
+        facet: "Wireless" # TODO        
       responses:
         '200':
           description: Successful operation
@@ -1240,7 +1319,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/masterNumber'
       description: >-
-        Discover unpaired W-Devices in the proximity of the W-Master.        
+        Discover unpaired W-Devices in the proximity of the W-Master.  
+      x-test:
+        facet: "Wireless" # TODO 
       requestBody:
         required: true
         content:
@@ -1314,7 +1395,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/masterNumber'   
       description: >-
-        List the unique identifiers (UniqueID) of the discovered unpaired W-Devices.    
+        List the unique identifiers (UniqueID) of the discovered unpaired W-Devices.
+      x-test:
+        facet: "Wireless" # TODO 
       responses:
         '200':
           description: Successful operation
@@ -1369,7 +1452,9 @@ paths:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/trackNumber'
       description: >-
-        Indicates the actual operational mode of the trackNumber (STOP, CYCLIC, SCAN, PAIRING, ROAMING) and the transmission power of the trackNumber radio.      
+        Indicates the actual operational mode of the trackNumber (STOP, CYCLIC, SCAN, PAIRING, ROAMING) and the transmission power of the trackNumber radio.   
+      x-test:
+        facet: "Wireless" # TODO    
       responses:
         '200':
           description: Successful operation
@@ -1419,7 +1504,9 @@ paths:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/trackNumber'
       description: >-
-        Monitoring the wireless environment regarding reliability indicating link quality.        
+        Monitoring the wireless environment regarding reliability indicating link quality.  
+      x-test:
+        facet: "Wireless" # TODO 
       responses:
         '200':
           description: Successful operation
@@ -1484,7 +1571,9 @@ paths:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/trackNumber'
       description: >-
-        Monitoring the wireless channel regarding reliability indicating link quality. 100 transmissions per channel are computed.         
+        Monitoring the wireless channel regarding reliability indicating link quality. 100 transmissions per channel are computed.
+      x-test:
+        facet: "Wireless" # TODO        
       responses:
         '200':
           description: Successful operation
@@ -1509,6 +1598,8 @@ paths:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/trackNumber'
       description: Read the configuration of the specified trackNumber. Mandatory for W-Masters.
+      x-test:
+        facet: "Wireless" # TODO 
       responses:
         '200':
           description: Successful operation
@@ -1531,6 +1622,8 @@ paths:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/trackNumber'
       description: Write the configuration of the specified trackNumber. Mandatory for W-Masters.
+      x-test:
+        facet: "Wireless" # TODO 
       requestBody:
         required: true
         content:
@@ -1604,6 +1697,8 @@ paths:
       description: Read all the available portNumber keys with the corresponding identification information.
       parameters:
         - $ref: '#/components/parameters/masterNumber'
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
@@ -1757,6 +1852,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/portNumber'
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
@@ -1823,7 +1920,11 @@ paths:
                           - "%"
               examples:
                 wired - Port in IO-Link:
-                  #TODO: x-test
+                  x-test:
+                    preconditions:
+                      - step: TV_PORT_DEVICE_ATTACHED
+                        skipOnFail: True
+                      - step: TM_CONFIGURE_PORT(AUTOSTART)
                   value:
                     statusInfo: "DEVICE_ONLINE"
                     ioLinkRevision: "1.1"  
@@ -1832,16 +1933,33 @@ paths:
                       value: 2.3
                       unit: ms
                 wired - Port in digital input:
+                  x-test:
+                    preconditions:
+                      - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
+                        skipOnFail: True
+                      - step: TM_CONFIGURE_PORT(DI)
+                      - step: TM_WAIT_DEVICE_STATUS(DIGITAL_INPUT_C/Q)
                   value:
                     statusInfo: "DIGITAL_INPUT_C/Q"
                 wired - Port in digital output:
+                  x-test:
+                    preconditions:
+                      - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
+                        skipOnFail: True
+                      - step: TM_CONFIGURE_PORT(DO)
+                      - step: TM_WAIT_DEVICE_STATUS(DIGITAL_OUTPUT_C/Q)
                   value:
                     statusInfo: "DIGITAL_OUTPUT_C/Q"
                 wired - Device offline:
+                  x-test:
+                    preconditions:
+                      - step: TM_CONFIGURE_PORT(DEACTIVATE)
+                      - step: TM_WAIT_DEVICE_STATUS(DEACTIVATED)
                   value:
                     statusInfo: "DEACTIVATED"
-
                 wireless: # @todo wireles
+                  x-test:
+                    facet: "Wireless"
                   value:
                     statusInfo: "DEVICE_ONLINE"
                     ioLinkRevision: "1.1"
@@ -1852,7 +1970,6 @@ paths:
                     portQuality:
                       value: 100
                       unit: "%"                      
-
         '403':
            $ref: '#/components/responses/HTTP_403'
         '404':
@@ -1878,15 +1995,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/portConfigurationGet'
-              example:
+              x-test: # TODO: Under example
+                preconditions:
+                  - step: TV_PORT_DEVICE_ATTACHED
+                    skipOnFail: True
+                  - step: TM_CONFIGURE_PORT(MANUAL_WITH_DS)
+              example: # TODO: Multiple examples needed?
                 mode: IOLINK_MANUAL
                 validationAndBackup: TYPE_COMPATIBLE_DEVICE_V1.1
                 iqConfiguration: DIGITAL_INPUT
                 cycleTime:
                   value: 2.3
                   unit: ms
-                vendorId: 26
-                deviceId: 333
+                vendorId: 676
+                deviceId: 11218
                 deviceAlias: Distance_sensor_1
         '403':
            $ref: '#/components/responses/HTTP_403'
@@ -1946,14 +2068,14 @@ paths:
               SIO - Digital input:
                 x-test:
                   preconditions:
-                    - step: TM_NOT(TV_DEVICE_ATTACHED)
+                    - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
                       skipOnFail: True
                 value:
                   mode: DIGITAL_INPUT
               SIO - Digital output:
                 x-test:
                   preconditions:
-                    - step: TM_NOT(TV_DEVICE_ATTACHED)
+                    - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
                       skipOnFail: True
                 value:
                   mode: DIGITAL_OUTPUT
@@ -2021,12 +2143,13 @@ paths:
                       vendorId: 676
                       deviceId: 11218
                       ioLinkRevision: '1.1'
+                      # TODO parameterChecksum: Device dependent?
                     content: >-
                       3a4n3QKkAAAr0gAAEwABAkJCEwACAkJCFAABAkJCFAACAkJC
                 Empty Data Storage:
                   x-test:
                     preconditions:
-                      - step: TM_CONFIGURE_PORT(DIGITAL_INPUT)
+                      - step: TM_CONFIGURE_PORT(DEACTIVATE)
                   value:
                     header: {}
                     content: ''
@@ -2063,13 +2186,13 @@ paths:
                     vendorId: 676
                     deviceId: 11218
                     ioLinkRevision: '1.1'
+                    # TODO parameterChecksum: Device dependent?
                   content: >-
                     3a4n3QKkAAAr0gAAEwABAkJCEwACAkJCFAABAkJCFAACAkJC
               Empty Data Storage:
                 x-test:
                   preconditions:
                     - step: TM_CONFIGURE_PORT(MANUAL_WITH_DS_MTU)
-                # TODO: Can we leave the header empty?
                 value:
                   header: {}
                   content: ''
@@ -2095,6 +2218,8 @@ paths:
         - devices
       summary: Get all available deviceAlias keys and the location by Master number and Port number.
       description: Get all available deviceAlias keys and the location by Master number and Port number.
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
@@ -2146,11 +2271,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
       x-test:
-        preconditions:
-          - step: TV_DEVICE_ATTACHED
-            failTest: False
-          - step: TM_CONFIGURE_PORT(AUTOSTART)
-          - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
+        facet: "Base"
       responses:
         '200':
           description: Successful opearation
@@ -2158,11 +2279,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/deviceCapabilitiesGet'
-              example:
-                minimumCycleTime:
-                  value: 2.3
-                  unit: ms
-                supportedProfiles: [10, 32770]
+              examples:
+                Device with profiles: # TODO: Rename example title.
+                  x-test:
+                    preconditions:
+                      - step: TV_PORT_DEVICE_ATTACHED
+                        skipOnFail: True
+                      - step: TM_CONFIGURE_PORT(AUTOSTART)
+                      - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
+                  value:
+                    minimumCycleTime:
+                      value: 2.3
+                      unit: ms
+                    supportedProfiles: [10, 32770]
         '400':  # code 307
            $ref: '#/components/responses/HTTP_400'       
         '403':
@@ -2184,18 +2313,20 @@ paths:
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
       x-test:
-        preconditions:
-          - step: TV_DEVICE_ATTACHED
-            failTest: False
-          - step: TM_CONFIGURE_PORT(AUTOSTART)
-          - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
+        facet: "Base"
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/deviceIdentificationGet'
+                $ref: '#/components/schemas/deviceIdentificationGet' # TODO: Example in schema.
+              x-test: 
+                preconditions: # TODO: Under example.
+                  - step: TV_PORT_DEVICE_ATTACHED
+                    skipOnFail: True
+                  - step: TM_CONFIGURE_PORT(AUTOSTART)
+                  - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
         '400':  # code 307
            $ref: '#/components/responses/HTTP_400'       
         '403':
@@ -2212,6 +2343,8 @@ paths:
       description: Write application specific identification to the Device.
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
+      x-test:
+        facet: "Base"
       requestBody:
         required: true
         content:
@@ -2222,8 +2355,10 @@ paths:
               All optional fields:
                 x-test:
                   preconditions:
-                    - step: TV_DEVICE_ATTACHED
-                      failTest: False
+                    - step: TV_PORT_DEVICE_ATTACHED
+                      skipOnFail: True
+                    - step: TM_CHECK_DEVICE_FEATURES(CP) # TODO: TV_DEVICE_SUPPORT_CP
+                      skipOnFail: True
                     - step: TM_CONFIGURE_PORT(AUTOSTART)
                     - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                 value:
@@ -2287,7 +2422,7 @@ paths:
                   x-test:
                     facet: "Base"
                     preconditions:
-                      - step: TV_DEVICE_ATTACHED
+                      - step: TV_PORT_DEVICE_ATTACHED
                         skipOnFail: True
                       - step: TM_CONFIGURE_PORT(AUTOSTART) # PDI, PDO support may differ from example, depends on the attached Device.
                       - step: TM_CONFIGURE_IQ(NOT_SUPPORTED)
@@ -2304,32 +2439,32 @@ paths:
                           - 12
                           - 22
                           - 216
-                'CQ in digital input, IQ in digital output': # TODO: Should be separated into two examples.
+                'CQ in digital input, IQ digital output':
                   x-test:
                     facet: "Base"
                     preconditions:
-                      - step: TM_NOT(TV_DEVICE_ATTACHED)
+                      - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
                         skipOnFail: True
                       - step: TM_CHECK_PORT_FEATURE(IQ_DO)
                         skipOnFail: True
-                      - step: TM_CONFIGURE_PORT(DIGITAL_INPUT)
                       - step: TM_CONFIGURE_IQ(DIGITAL_OUTPUT)
+                      - step: TM_CONFIGURE_PORT(DIGITAL_INPUT)
                       - step: TM_WAIT_DEVICE_STATUS(DIGITAL_INPUT_C/Q)
                   value:
                     getData:
                       cqValue: false
                     setData:
                       iqValue: true
-                'CQ in digital output, IQ in digital input': # TODO: Should be separated into two examples.
+                'CQ in digital output, IQ digital input':
                   x-test:
                     facet: "Base"
                     preconditions:
-                      - step: TM_NOT(TV_DEVICE_ATTACHED)
+                      - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
                         skipOnFail: True
                       - step: TM_CHECK_PORT_FEATURE(IQ_DI)
                         skipOnFail: True
-                      - step: TM_CONFIGURE_PORT(DIGITAL_OUTPUT)
                       - step: TM_CONFIGURE_IQ(DIGITAL_INPUT)
+                      - step: TM_CONFIGURE_PORT(DIGITAL_OUTPUT)
                       - step: TM_WAIT_DEVICE_STATUS(DIGITAL_OUTPUT_C/Q)
                   value:
                     getData:
@@ -2468,6 +2603,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
         - $ref: '#/components/parameters/format'
+      x-test:
+        facet: ["Base", "IODD"]
       responses:
         '200':
           description: Successful operation
@@ -2478,11 +2615,14 @@ paths:
               examples:
                 'CQ (pin4) in IO-Link (input), IQ (pin2) not supported':
                   x-test:
+                    facet: "Base"
                     preconditions:
-                      - step: TV_DEVICE_ATTACHED
-                        failTest: False
-                      - step: TM_CONFIGURE_PORT(AUTOSTART) # May differ from example, depends on the attached Device.
+                      - step: TV_PORT_DEVICE_ATTACHED
+                        skipOnFail: True
+                      - step: TM_CHECK_DEVICE_FEATURES(PDI)
+                        skipOnFail: True
                       - step: TM_CONFIGURE_IQ(NOT_SUPPORTED)
+                      - step: TM_CONFIGURE_PORT(AUTOSTART)
                       - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                   value:
                     ioLink:
@@ -2493,27 +2633,33 @@ paths:
                         - 216
                 'CQ (pin4) in IO-Link (output), IQ (pin2) in digital input':
                   x-test:
+                    facet: "Base"
                     preconditions:
-                      - step: TM_NOT(TV_DEVICE_ATTACHED)
-                        failTest: False
-                      - step: TM_CONFIGURE_PORT(AUTOSTART) # TODO
+                      - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
+                        skipOnFail: True
+                      - step: TM_CHECK_PORT_FEATURES(IQ_DI)
+                        skipOnFail: True
                       - step: TM_CONFIGURE_IQ(DIGITAL_INPUT)
+                      - step: TM_CONFIGURE_PORT(AUTOSTART) # TODO: Is autostarting the port here needed?
                       - step: TM_WAIT_DEVICE_STATUS(COMMUNICATION_LOST)
                   value:
                     iqValue: true
                 'CQ (pin4) in digital input, IQ (pin2) in digital output':
                   x-test:
+                    facet: "Base"
                     preconditions:
-                      - step: TM_NOT(TV_DEVICE_ATTACHED)
-                        failTest: False
-                      - step: TM_CONFIGURE_PORT(DIGITAL_INPUT)
+                      - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
+                        skipOnFail: True
+                      - step: TM_CHECK_PORT_FEATURES(IQ_DO)
+                        skipOnFail: True
                       - step: TM_CONFIGURE_IQ(DIGITAL_OUTPUT)
+                      - step: TM_CONFIGURE_PORT(DIGITAL_INPUT)
                       - step: TM_WAIT_DEVICE_STATUS(DIGITAL_INPUT_C/Q)
                   value:
                     cqValue: true
                 'IODD format, CQ (pin4) in IO-Link, IQ (pin2) in digital input':
                   x-test:
-                    skip: True
+                    facet: "IODD"
                   value:
                     ioLink:
                       valid: true
@@ -2559,10 +2705,12 @@ paths:
                   x-test:
                     facet: 'Base'
                     precondition:
-                      - step: TV_DEVICE_ATTACHED
-                        failTest: False
-                      - step: TM_CONFIGURE_PORT(AUTOSTART) # May differ from example, depends on the attached Device.
+                      - step: TV_PORT_DEVICE_ATTACHED
+                        skipOnFail: True
+                      - step: TM_CHECK_DEVICE_FEATURES(PDO)
+                        skipOnFail: True
                       - step: TM_CONFIGURE_IQ(NOT_SUPPORTED)
+                      - step: TM_CONFIGURE_PORT(AUTOSTART)
                       - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                   value:
                     ioLink:
@@ -2575,10 +2723,12 @@ paths:
                   x-test:
                     facet: 'Base'
                     precondition:
-                      - step: TM_NOT(TV_DEVICE_ATTACHED)
-                        failTest: False
-                      - step: TM_CONFIGURE_PORT(AUTOSTART) # TODO
+                      - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
+                        skipOnFail: True
+                      - step: TM_CHECK_PORT_FEATURES(IQ_DI)
+                        skipOnFail: True
                       - step: TM_CONFIGURE_IQ(DIGITAL_OUTPUT)
+                      - step: TM_CONFIGURE_PORT(AUTOSTART) # TODO: Is autostarting the port here needed?
                       - step: TM_WAIT_DEVICE_STATUS(COMMUNICATION_LOST)
                   value:
                     iqValue: true
@@ -2586,16 +2736,18 @@ paths:
                   x-test:
                     facet: 'Base'
                     preconditions:
-                      - step: TM_NOT(TV_DEVICE_ATTACHED)
-                        failTest: False
-                      - step: TM_CONFIGURE_PORT(DIGITAL_OUTPUT)
+                      - step: TM_NOT(TV_PORT_DEVICE_ATTACHED)
+                        skipOnFail: True
+                      - step: TM_CHECK_PORT_FEATURES(IQ_DO)
+                        skipOnFail: True
                       - step: TM_CONFIGURE_IQ(DIGITAL_INPUT)
+                      - step: TM_CONFIGURE_PORT(DIGITAL_OUTPUT)
                       - step: TM_WAIT_DEVICE_STATUS(DIGITAL_OUTPUT_C/Q)
                   value:
                     cqValue: true
-                'Format=iodd, CQ (pin4) in IO-Link, IQ (pin2) in digital input':
+                'IODD format, CQ (pin4) in IO-Link, IQ (pin2) in digital input':
                   x-test:
-                    skip: True
+                    facet: 'IODD'
                   value:
                     iolink:
                       valid: true
@@ -2657,6 +2809,8 @@ paths:
         - $ref: '#/components/parameters/deviceAlias'
         - $ref: '#/components/parameters/index'
         - $ref: '#/components/parameters/format'
+      x-test:
+        facet: ["Base", "IODD"]
       responses:
         '200':
           description: Successful operation
@@ -2667,11 +2821,14 @@ paths:
               examples:
                 byteArray format:
                   x-test:
+                    facet: "Base"
                     parameters:
                       index: 24 # Application specific tag.
                     preconditions:
-                    - step: TV_DEVICE_ATTACHED
-                      failTest: False
+                    - step: TV_PORT_DEVICE_ATTACHED
+                      skipOnFail: True
+                    - step: TM_CHECK_DEVICE_FEATURES(CP)
+                      skipOnFail: True
                     - step: TM_CONFIGURE_PORT(AUTOSTART)
                     - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                   value:
@@ -2692,12 +2849,12 @@ paths:
                      - 0x21
                 IODD format, simple type:
                   x-test:
-                    skip: True
+                    facet: "IODD"
                   value:
                     value: 15.2
                 IODD format, complex type:
                   x-test:
-                    skip: True
+                    facet: "IODD"
                   value:
                     Distance:
                       value: 15
@@ -2722,7 +2879,9 @@ paths:
       description: Write a parameter value with the given index to the specified Device.
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
-        - $ref: '#/components/parameters/index'     
+        - $ref: '#/components/parameters/index'
+      x-test:
+        facet: ["Base", "IODD"]   
       requestBody:
         required: true
         content:
@@ -2732,11 +2891,14 @@ paths:
             examples:
               Payload in byteArray format:
                 x-test:
+                  facet: "Base"
                   parameters:
                     index: 24 # Application specific tag.
                   preconditions:
-                    - step: TV_DEVICE_ATTACHED
-                      failTest: False
+                    - step: TV_PORT_DEVICE_ATTACHED
+                      skipOnFail: True
+                    - step: TM_CHECK_DEVICE_FEATURES(CP)
+                      skipOnFail: True
                     - step: TM_CONFIGURE_PORT(AUTOSTART)
                     - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                 value: 
@@ -2757,12 +2919,12 @@ paths:
                    - 0x21
               Payload in IODD format, simple type:
                 x-test:
-                  skip: True
+                  facet: "IODD"
                 value:
                   value: 15.2
               Payload in IODD format, complex type:
                 x-test:
-                  skip: True
+                  facet: "IODD"
                 value:
                   Distance:
                     value: 15
@@ -2796,7 +2958,7 @@ paths:
         - $ref: '#/components/parameters/parameterName'
         - $ref: '#/components/parameters/format'
       x-test:
-        skip: True
+        facet: "IODD"
       responses:
         '200':
           description: Successful operation
@@ -2846,7 +3008,7 @@ paths:
         - $ref: '#/components/parameters/deviceAlias'
         - $ref: '#/components/parameters/parameterName'
       x-test:
-        skip: True
+        facet: "IODD"
       requestBody:
         required: true
         content:
@@ -2899,7 +3061,7 @@ paths:
         - $ref: '#/components/parameters/deviceAlias'
         - $ref: '#/components/parameters/index'
       x-test:
-        skip: True
+        facet: "IODD"
       responses:
         '200':
           description: Successful operation
@@ -2931,7 +3093,7 @@ paths:
         - $ref: '#/components/parameters/deviceAlias'
         - $ref: '#/components/parameters/parameterName'
       x-test:
-        skip: True
+        facet: "IODD"
       responses:
         '200':
           description: Successful operation
@@ -2963,6 +3125,8 @@ paths:
         - $ref: '#/components/parameters/index'
         - $ref: '#/components/parameters/subindex'
         - $ref: '#/components/parameters/format'
+      x-test:
+        facet: ["Base", "IODD"]
       responses:
         '200':
           description: Successful operation
@@ -2973,12 +3137,15 @@ paths:
               examples:
                 byteArray format:
                   x-test:
+                    facet: "Base"
                     parameters:
                       index: 24 # Application specific tag.
-                      subindex: 0 # TODO: Should be changed to other index, which has subindex.
+                      subindex: 0
                     preconditions:
-                    - step: TV_DEVICE_ATTACHED
-                      failTest: False
+                    - step: TV_PORT_DEVICE_ATTACHED
+                      skipOnFail: True
+                    - step: TM_CHECK_DEVICE_FEATURES(CP) # TODO: For ISDU support.
+                      skipOnFail: True
                     - step: TM_CONFIGURE_PORT(AUTOSTART)
                     - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                   value:
@@ -2999,7 +3166,7 @@ paths:
                      - 0x21
                 IODD format, simple type:
                   x-test:
-                    skip: True
+                    facet: "IODD"
                   value:
                     value: 15.2
         '400':  # code 305, 306, 307, 311, 601
@@ -3023,6 +3190,8 @@ paths:
         - $ref: '#/components/parameters/deviceAlias'
         - $ref: '#/components/parameters/index'
         - $ref: '#/components/parameters/subindex'
+      x-test:
+        facet: ["Base", "IODD"]
       requestBody:
         required: true
         content:
@@ -3032,12 +3201,15 @@ paths:
             examples:
               byteArray format:
                 x-test:
+                  facet: "Base"
                   parameters:
                     index: 24 # Application specific tag.
-                    subindex: 0 # TODO: Should be changed to other index, which has subindex.
+                    subindex: 0
                   preconditions:
-                  - step: TV_DEVICE_ATTACHED
-                    failTest: False
+                  - step: TV_PORT_DEVICE_ATTACHED
+                    skipOnFail: True
+                  - step: TM_CHECK_DEVICE_FEATURES(CP) # TODO: For ISDU support.
+                    skipOnFail: True
                   - step: TM_CONFIGURE_PORT(AUTOSTART)
                   - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                 value:
@@ -3058,7 +3230,7 @@ paths:
                    - 0x21
               IODD format, simple type:
                 x-test:
-                  skip: True
+                  facet: "IODD"
                 value:
                   value: 15.2
       responses:
@@ -3090,7 +3262,7 @@ paths:
         - $ref: '#/components/parameters/subParameterName'
         - $ref: '#/components/parameters/format'
       x-test:
-        skip: True
+        facet: "IODD"
       responses:
         '200':
           description: Successful operation
@@ -3134,7 +3306,7 @@ paths:
         - $ref: '#/components/parameters/parameterName'
         - $ref: '#/components/parameters/subParameterName'
       x-test:
-        skip: True
+        facet: "IODD"
       requestBody:
         required: true
         content:
@@ -3179,6 +3351,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
         - $ref: '#/components/parameters/format'
+      x-test:
+        facet: ["Base", "IODD"]
       requestBody:
         required: true
         content:
@@ -3188,9 +3362,12 @@ paths:
             examples:
               read, byteArray format:
                 x-test:
+                  facet: "Base"
                   preconditions:
-                    - step: TV_DEVICE_ATTACHED
-                      failTest: False
+                    - step: TV_PORT_DEVICE_ATTACHED
+                      skipOnFail: True
+                    - step: TM_CHECK_DEVICE_FEATURES(CP)
+                      skipOnFail: True
                     - step: TM_CONFIGURE_PORT(AUTOSTART)
                     - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                 value:
@@ -3203,7 +3380,7 @@ paths:
                         subIndex: 4
               read, IODD format:
                 x-test:
-                  skip: True
+                  facet: "IODD"
                 value:
                   direction: READ
                   parameters:
@@ -3214,9 +3391,12 @@ paths:
                         subParameterName: Quality
               write, byteArray format:
                 x-test:
+                  facet: "Base"
                   preconditions:
-                    - step: TV_DEVICE_ATTACHED
-                      failTest: False
+                    - step: TV_PORT_DEVICE_ATTACHED
+                      skipOnFail: True
+                    - step: TM_CHECK_DEVICE_FEATURES(CP)
+                      skipOnFail: True
                     - step: TM_CONFIGURE_PORT(AUTOSTART)
                     - step: TM_WAIT_DEVICE_STATUS(DEVICE_ONLINE)
                 value:
@@ -3247,7 +3427,7 @@ paths:
                           - 0x21
               write, IODD format:
                 x-test:
-                  skip: True
+                  facet: "IODD"
                 value:
                   direction: WRITE
                   parameters:
@@ -3379,6 +3559,8 @@ paths:
         - $ref: '#/components/parameters/eventBottom'
       summary:  Reading the EventLog filtered for a specific Device.
       description: Reading the EventLog filtered for a specific Device.
+      x-test:
+        facet: "Base"
       responses:
         '200':
           description: >-
@@ -3388,6 +3570,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/deviceEventsGet'
+              examples:
+                Warning: # TODO
+                  x-test: {} # TODO
+                  value:
+                    - time: '2018-05-18T07:31:54.123Z'
+                      severity: WARNING
+                      origin:
+                        master: 1
+                        port: 1
+                        deviceAlias: Temperature_sensor_1
+                      message:
+                        code: 16912
+                        mode: APPEARS
+                        text: Device temperature over-run – Clear source of heat
         '400':  # code 305, 306
            $ref: '#/components/responses/HTTP_400'
         '403':
@@ -3894,17 +4090,6 @@ components:
               - mode
             allOf:
               - $ref: '#/components/schemas/eventObject'
-      example:
-        - time: '2018-05-18T07:31:54.123Z'
-          severity: WARNING
-          origin:
-            master: 1
-            port: 1
-            deviceAlias: Temperature_sensor_1
-          message:
-            code: 16912
-            mode: APPEARS
-            text: Device temperature over-run – Clear source of heat
     gatewayIdentificationGet:
       type: object
       required:
