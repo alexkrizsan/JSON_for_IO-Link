@@ -445,6 +445,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/gatewayEventsGet'
               examples:
+                origin=ALL:
                   value:
                     - time: '2018-05-18T07:31:54.123Z'
                       severity: WARNING
@@ -1112,7 +1113,7 @@ paths:
       summary: Read the actual configuration of the specified Master.
       description: Read the actual configuration of the specified Master.
       parameters:
-        - $ref: '#/components/parameters/masterNumber'
+        - $ref: '#/components/parameters/masterNumber'      
       responses:
         '200':
           description: Successful operation
@@ -1131,7 +1132,7 @@ paths:
       summary: Write the configuration of the specified Master.
       description: Write the configuration of the specified Master.
       parameters:
-        - $ref: '#/components/parameters/masterNumber'
+        - $ref: '#/components/parameters/masterNumber'      
       requestBody:
         required: true
         content:
@@ -1188,7 +1189,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/masterNumber'
       description: >-
-        A W-Master can handle up to 5 transmission tracks in parallel, each trackNumber can handle a maximum of 8 W-Devices, thus supporting up to 40 W-Devices per W-Master.      
+        A W-Master can handle up to 5 transmission tracks in parallel, each trackNumber can handle a maximum of 8 W-Devices, thus supporting up to 40 W-Devices per W-Master.         
       responses:
         '200':
           description: Successful operation
@@ -1239,7 +1240,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/masterNumber'
       description: >-
-        Discover unpaired W-Devices in the proximity of the W-Master.
+        Discover unpaired W-Devices in the proximity of the W-Master.        
       requestBody:
         required: true
         content:
@@ -1313,7 +1314,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/masterNumber'   
       description: >-
-        List the unique identifiers (UniqueID) of the discovered unpaired W-Devices.
+        List the unique identifiers (UniqueID) of the discovered unpaired W-Devices.    
       responses:
         '200':
           description: Successful operation
@@ -1368,7 +1369,7 @@ paths:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/trackNumber'
       description: >-
-        Indicates the actual operational mode of the trackNumber (STOP, CYCLIC, SCAN, PAIRING, ROAMING) and the transmission power of the trackNumber radio.     
+        Indicates the actual operational mode of the trackNumber (STOP, CYCLIC, SCAN, PAIRING, ROAMING) and the transmission power of the trackNumber radio.      
       responses:
         '200':
           description: Successful operation
@@ -1418,7 +1419,7 @@ paths:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/trackNumber'
       description: >-
-        Monitoring the wireless environment regarding reliability indicating link quality.  
+        Monitoring the wireless environment regarding reliability indicating link quality.        
       responses:
         '200':
           description: Successful operation
@@ -1483,7 +1484,7 @@ paths:
         - $ref: '#/components/parameters/masterNumber'
         - $ref: '#/components/parameters/trackNumber'
       description: >-
-        Monitoring the wireless channel regarding reliability indicating link quality. 100 transmissions per channel are computed.    
+        Monitoring the wireless channel regarding reliability indicating link quality. 100 transmissions per channel are computed.         
       responses:
         '200':
           description: Successful operation
@@ -1847,6 +1848,7 @@ paths:
                     portQuality:
                       value: 100
                       unit: "%"                      
+
         '403':
            $ref: '#/components/responses/HTTP_403'
         '404':
@@ -2504,7 +2506,7 @@ paths:
       description: Write a parameter value with the given index to the specified Device.
       parameters:
         - $ref: '#/components/parameters/deviceAlias'
-        - $ref: '#/components/parameters/index'
+        - $ref: '#/components/parameters/index'     
       requestBody:
         required: true
         content:
@@ -3625,7 +3627,6 @@ components:
             code: 16912
             mode: APPEARS
             text: Device temperature over-run – Clear source of heat
-example:
     gatewayIdentificationGet:
       type: object
       required:
@@ -5771,4 +5772,5 @@ example:
                     value:
                       code: 107
                       message: 'Service temporarily unavailable'
+
                       
