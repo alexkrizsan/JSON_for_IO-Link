@@ -1872,16 +1872,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/portConfigurationGet'
-              example:
-                mode: IOLINK_MANUAL
-                validationAndBackup: TYPE_COMPATIBLE_DEVICE_V1.1
-                iqConfiguration: DIGITAL_INPUT
-                cycleTime:
-                  value: 2.3
-                  unit: ms
-                vendorId: 676
-                deviceId: 11218
-                deviceAlias: Distance_sensor_1
+              examples:
+                Port in IO-Link:
+                  value:
+                    mode: IOLINK_MANUAL
+                    validationAndBackup: TYPE_COMPATIBLE_DEVICE_V1.1
+                    iqConfiguration: DIGITAL_INPUT
+                    cycleTime:
+                      value: 2.3
+                      unit: ms
+                    vendorId: 676
+                    deviceId: 11218
+                    deviceAlias: Distance_sensor_1
+                Device offline:
+                  value:
+                    mode: DEACTIVATED
+                    iqConfiguration: DIGITAL_INPUT
+                    deviceAlias: Distance_sensor_1
         '403':
            $ref: '#/components/responses/HTTP_403'
         '404':
